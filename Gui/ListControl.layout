@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Window" skin="BackgroundInteractableWide" position="0 0 620 400" name="BackPanel">
+        <Widget type="TextBox" skin="TextBox" position_real="0.258065 0.0125 0.483871 0.1" align="HCenter Top" name="Title">
+            <Property key="TextColour" value="1 0.647059 0"/>
+            <Property key="TextShadowColour" value="0.350877 0.232687 0"/>
+            <Property key="TextShadow" value="true"/>
+            <Property key="Caption" value="Title"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="FontName" value="ButtonCaptionSmall"/>
+        </Widget>
+        <Widget type="Widget" skin="PanelEmpty" position_real="0.258065 0.1625 0.483871 0.7" align="Stretch" name="ListPanel">
+            <Property key="Alpha" value="1"/>
+            <Widget type="Button" skin="SecondaryButton" position_real="0.433333 0.0178571 0.133333 0.142857" name="ScrollUp">
+                <Property key="Caption" value="↑"/>
+                <Property key="FontName" value="InterMedium24"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Button" skin="SecondaryButton" position_real="0.433333 0.839286 0.133333 0.142857" name="ScrollDown">
+                <Property key="FontName" value="InterMedium24"/>
+                <Property key="Caption" value="↓"/>
+                <Property key="TextAlign" value="Center"/>
+            </Widget>
+            <Widget type="Widget" skin="HudBackgroundShadowLarge" position_real="0 0.178571 1 0.642857" name="ListBackground">
+                <Widget type="Button" skin="GenderButton" position_real="0.0166667 0.0277778 0.966667 0.166667" name="-2">
+                    <Property key="FontName" value="ButtonCaptionSmall"/>
+                    <Property key="Caption" value="n-2"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Alpha" value="0.3"/>
+                </Widget>
+                <Widget type="Button" skin="GenderButton" position_real="0.0166667 0.222222 0.966667 0.166667" name="-1">
+                    <Property key="FontName" value="ButtonCaptionSmall"/>
+                    <Property key="Caption" value="n-1"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Alpha" value="0.6"/>
+                </Widget>
+                <Widget type="Button" skin="GenderButton" position_real="0.0166667 0.416667 0.966667 0.166667" name="0">
+                    <Property key="FontName" value="ButtonCaptionSmall"/>
+                    <Property key="Caption" value="n"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="StateSelected" value="true"/>
+                    <Property key="ModeImage" value="true"/>
+                    <Controller type="ControllerFadeAlpha">
+                        <Property key="Alpha" value="1"/>
+                    </Controller>
+                </Widget>
+                <Widget type="Button" skin="GenderButton" position_real="0.0166667 0.611111 0.966667 0.166667" name="1">
+                    <Property key="FontName" value="ButtonCaptionSmall"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Alpha" value="0.6"/>
+                    <Property key="Caption" value="n+1"/>
+                </Widget>
+                <Widget type="Button" skin="GenderButton" position_real="0.0166667 0.805556 0.966667 0.166667" name="2">
+                    <Property key="FontName" value="ButtonCaptionSmall"/>
+                    <Property key="Caption" value="n+2"/>
+                    <Property key="TextAlign" value="Center"/>
+                    <Property key="Alpha" value="0.3"/>
+                </Widget>
+            </Widget>
+        </Widget>
+    </Widget>
+    <CodeGeneratorSettings/>
+</MyGUI>
