@@ -1,0 +1,45 @@
+sm._class = sm._class or class
+
+--[[--
+    Extends the current class function with a callable constructor.
+    This can be used just as the previous version of class()
+    @usage local myType = class()
+    @usage function myType:__init() end
+    @usage myType(arg1, arg2, arg3)
+]]
+function class(superType)
+    local newType
+    local proxy = sm._class()
+
+    if superType then
+        if superType._type then
+            newType = sm._class(superType._type)
+        else
+            newType = sm._class(superType)
+        end
+    else
+        newType = sm._class()
+    end
+
+    function proxy:__call(...)
+        newType.__init = newType.__init or function() end
+        local instance = newType()
+        instance:__init(...)
+
+        return instance
+    end
+
+    function proxy:__index(key)
+        if (key == "_type") then
+            return newType
+        else
+            return newType[key]
+        end
+    end
+
+    function proxy:__newindex(key, value)
+        newType[key] = value
+    end
+
+    return proxy()
+end
