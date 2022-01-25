@@ -144,3 +144,7 @@ function Keypad:decimalPoint()
 
     self.gui:setText("Textbox", self.buffer)
 end
+
+function Keypad:destroy()
+    self.gui:destroy()
+end

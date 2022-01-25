@@ -129,3 +129,7 @@ function ListControl:open()
     self:update()
     self.gui:open()
 end
+
+function ListControl:destroy()
+    self.gui:destroy()
+end

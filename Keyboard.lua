@@ -116,3 +116,7 @@ function Keyboard:spacebar()
     self.buffer = self.buffer .. " "
     self.gui:setText("Textbox", self.buffer)
 end
+
+function Keyboard:destroy()
+    self.gui:destroy()
+end
