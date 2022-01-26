@@ -20,7 +20,7 @@ local function generateCallbacks(self, scriptedShape)
         self:confirm(shape, buttonName)
     end
 
-    scriptedShape.gui_listControlOnCloseCallback = function (shape)
+    scriptedShape.gui_listControlCloseCallback = function (shape)
         self:close()
     end
 end
@@ -33,7 +33,7 @@ local function setCallbacks(self)
     self.gui:setButtonCallback("ScrollUp", "gui_listControlScroll")
     self.gui:setButtonCallback("ScrollDown", "gui_listControlScroll")
     self.gui:setButtonCallback("0", "gui_listControlConfirm")
-    self.gui:setOnCloseCallback("gui_listControlOnCloseCallback")
+    self.gui:setOnCloseCallback("gui_listControlCloseCallback")
 end
 
 function ListControl:__init(scriptedShape, title, elements, onConfirmCallback, onCloseCallback)
