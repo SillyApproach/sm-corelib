@@ -5,48 +5,48 @@ Keyboard.scriptedShape = nil
 Keyboard.buffer = nil
 Keyboard.shift = nil
 
-local function generateCallbacks(scriptedShape, instance)
+local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_keyboardButtonCallback = function (shape, buttonName)
-        instance:onButtonClick(buttonName)
+        self:onButtonClick(buttonName)
     end
 
     scriptedShape.gui_keyboardConfirm = function (shape, buttonName)
-        instance:confirm()
+        self:confirm()
     end
 
     scriptedShape.gui_keyboardCancel = function (shape, buttonName)
-        instance:cancel()
+        self:cancel()
     end
 
     scriptedShape.gui_keyboardBackspace = function (shape, buttonName)
-        instance:backspace()
+        self:backspace()
     end
 
     scriptedShape.gui_keyboardShift = function (shape, buttonName)
-        instance:shiftKeys()
+        self:shiftKeys()
     end
 
     scriptedShape.gui_keyboardSpacebar = function (shape, buttonName)
-        instance:spacebar()
+        self:spacebar()
     end
 
     scriptedShape.gui_keyboardCloseCallback = function (shape)
-        instance:close()
+        self:close()
     end
 end
 
-local function setCallbacks(instance)
-    for i = 1, #instance.layout.keys, 1 do
-        instance.gui:setText(tostring(i), instance.layout.keys[i][1])
-        instance.gui:setButtonCallback(tostring(i), "gui_keyboardButtonCallback")
+local function setCallbacks(self)
+    for i = 1, #self.layout.keys, 1 do
+        self.gui:setText(tostring(i), self.layout.keys[i][1])
+        self.gui:setButtonCallback(tostring(i), "gui_keyboardButtonCallback")
     end
 
-    instance.gui:setButtonCallback("Confirm", "gui_keyboardConfirm")
-    instance.gui:setButtonCallback("Cancel", "gui_keyboardCancel")
-    instance.gui:setButtonCallback("Backspace", "gui_keyboardBackspace")
-    instance.gui:setButtonCallback("Shift", "gui_keyboardShift")
-    instance.gui:setButtonCallback("Space", "gui_keyboardSpacebar")
-    instance.gui:setOnCloseCallback("gui_keyboardCloseCallback")
+    self.gui:setButtonCallback("Confirm", "gui_keyboardConfirm")
+    self.gui:setButtonCallback("Cancel", "gui_keyboardCancel")
+    self.gui:setButtonCallback("Backspace", "gui_keyboardBackspace")
+    self.gui:setButtonCallback("Shift", "gui_keyboardShift")
+    self.gui:setButtonCallback("Space", "gui_keyboardSpacebar")
+    self.gui:setOnCloseCallback("gui_keyboardCloseCallback")
 end
 
 function Keyboard:__init(scriptedShape, title, onConfirmCallback, onCloseCallback)
@@ -70,7 +70,7 @@ function Keyboard:__init(scriptedShape, title, onConfirmCallback, onCloseCallbac
         self.buffer = ""
     end
 
-    generateCallbacks(scriptedShape, self)
+    generateCallbacks(self, scriptedShape)
     setCallbacks(self)
 end
 

@@ -6,52 +6,52 @@ Keypad.buffer = nil
 Keypad.hasDecimalPoint = nil
 Keypad.negative = nil
 
-local function generateCallbacks(scriptedShape, instance)
+local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_keypadButtonCallback = function (shape, buttonName)
-        instance:onButtonClick(buttonName)
+        self:onButtonClick(buttonName)
     end
 
     scriptedShape.gui_keypadConfirm = function (shape, buttonName)
-        instance:confirm()
+        self:confirm()
     end
 
     scriptedShape.gui_keypadCancel = function (shape, buttonName)
-        instance:cancel()
+        self:cancel()
     end
 
     scriptedShape.gui_keypadClear = function (shape, buttonName)
-        instance:clear()
+        self:clear()
     end
 
     scriptedShape.gui_keypadBackspace = function (shape, buttonName)
-        instance:backspace()
+        self:backspace()
     end
 
     scriptedShape.gui_keypadNegate = function (shape, buttonName)
-        instance:negate()
+        self:negate()
     end
 
     scriptedShape.gui_keypadDecimalPoint = function (shape, buttonName)
-        instance:decimalPoint()
+        self:decimalPoint()
     end
 
     scriptedShape.gui_keypadCloseCallback = function (shape)
-        instance:close()
+        self:close()
     end
 end
 
-local function setCallbacks(instance)
+local function setCallbacks(self)
     for i = 0, 9, 1 do
-        instance.gui:setButtonCallback(tostring(i), "gui_keypadButtonCallback")
+        self.gui:setButtonCallback(tostring(i), "gui_keypadButtonCallback")
     end
 
-    instance.gui:setButtonCallback("Confirm", "gui_keypadConfirm")
-    instance.gui:setButtonCallback("Cancel", "gui_keypadCancel")
-    instance.gui:setButtonCallback("Clear", "gui_keypadClear")
-    instance.gui:setButtonCallback("Backspace", "gui_keypadBackspace")
-    instance.gui:setButtonCallback("Negate", "gui_keypadNegate")
-    instance.gui:setButtonCallback("DecimalPoint", "gui_keypadDecimalPoint")
-    instance.gui:setOnCloseCallback("gui_keypadCloseCallback")
+    self.gui:setButtonCallback("Confirm", "gui_keypadConfirm")
+    self.gui:setButtonCallback("Cancel", "gui_keypadCancel")
+    self.gui:setButtonCallback("Clear", "gui_keypadClear")
+    self.gui:setButtonCallback("Backspace", "gui_keypadBackspace")
+    self.gui:setButtonCallback("Negate", "gui_keypadNegate")
+    self.gui:setButtonCallback("DecimalPoint", "gui_keypadDecimalPoint")
+    self.gui:setOnCloseCallback("gui_keypadCloseCallback")
 end
 
 function Keypad:__init(scriptedShape, title, onConfirmCallback, onCloseCallback)
@@ -77,7 +77,7 @@ function Keypad:__init(scriptedShape, title, onConfirmCallback, onCloseCallback)
         self.negative = false
     end
 
-    generateCallbacks(scriptedShape, self)
+    generateCallbacks(self, scriptedShape)
     setCallbacks(self)
 end
 
