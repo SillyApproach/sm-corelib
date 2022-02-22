@@ -33,6 +33,10 @@ function Set:add(value)
     return not isPresent
 end
 
+function Set:tryGet(value)
+    return self:contains(value), self.array[self.keyProvider(value)] or value
+end
+
 function Set:remove(value)
     local uniqueKey = self.keyProvider(value)
     local isPresent = self.array[uniqueKey] ~= nil
