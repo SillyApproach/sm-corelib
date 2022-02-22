@@ -76,7 +76,7 @@ function Set:getIterator()
 end
 
 function Set:clone()
-    local copy = Set()
+    local copy = Set(self.keyProvider)
 
     for _, value in self:getIterator() do
         copy:add(value)
