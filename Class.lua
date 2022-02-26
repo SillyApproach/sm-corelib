@@ -1,4 +1,5 @@
 sm._class = sm._class or class
+local function emptyCtor() end
 
 --[[--
     Extends the current class function with a callable constructor.
@@ -22,7 +23,7 @@ function class(superType)
     end
 
     function proxy:__call(...)
-        newType.__init = newType.__init or function() end
+        newType.__init = newType.__init or emptyCtor
         local instance = newType()
         instance:__init(...)
 
