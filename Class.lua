@@ -11,8 +11,8 @@ local function emptyCtor() end
 function class(superType)
     local proxy, newType = sm._class()
 
-    if superType then
-        newType = superType._type and sm._class(superType._type) or sm._class(superType)
+    if superType ~= nil then
+        newType = superType._type ~= nil and sm._class(superType._type) or sm._class(superType)
     else
         newType = sm._class()
     end
