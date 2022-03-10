@@ -3,14 +3,15 @@ Matrix.m = nil
 Matrix.n = nil
 Matrix.data = nil
 
-local function newDataTable(m, n)
+local function newDataTable(m, n, v)
     local data = {}
+    v = v or 0
 
     for i = 1, m, 1 do
         table.insert(data, i, {})
 
         for j = 1, n, 1 do
-            table.insert(data[i], j, 0)
+            table.insert(data[i], j, v)
         end
     end
 
@@ -32,12 +33,29 @@ local function matrixEntrywiseSum(a, b, sign)
     return Matrix(data)
 end
 
-function Matrix:__init(data)
-    assert(type(data) == "table", "Argument of type table expected")
-
+local function __init1(self, data)
     self.m = #data
     self.n = #data[1]
     self.data = data
+end
+
+local function __init2(self, m, n, v)
+    self.m = m
+    self.n = n
+    self.data = newDataTable(m, n, v)
+end
+
+function Matrix:__init(...)
+    local args = {...}
+    assert(#args > 0, "No arguments passed. Either pass a table with matrix values or dimensions m and n and a default entry value v")
+
+    if type(#args[1]) == "table" then
+        __init1(self, #args[1])
+    elseif #args >= 2 and type(args[1]) == "number" and type(args[2]) == "number" then
+        __init2(self, args[1], args[2], args[3])
+    else
+        error("Arguments must be either a m*n array or two dimensions m and n and a default entry value v")
+    end
 end
 
 function Matrix.__mul(a, b)
