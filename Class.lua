@@ -1,4 +1,5 @@
 sm._class = sm._class or class
+local function emptyCtor() end
 
 --[[--
     Extends the current class function with a callable constructor.
@@ -8,21 +9,16 @@ sm._class = sm._class or class
     @usage myType(arg1, arg2, arg3)
 ]]
 function class(superType)
-    local newType
-    local proxy = sm._class()
+    local proxy, newType = sm._class()
 
-    if superType then
-        if superType._type then
-            newType = sm._class(superType._type)
-        else
-            newType = sm._class(superType)
-        end
+    if superType ~= nil then
+        newType = superType._type ~= nil and sm._class(superType._type) or sm._class(superType)
     else
         newType = sm._class()
     end
 
     function proxy:__call(...)
-        newType.__init = newType.__init or function() end
+        newType.__init = newType.__init or emptyCtor
         local instance = newType()
         instance:__init(...)
 
@@ -32,9 +28,9 @@ function class(superType)
     function proxy:__index(key)
         if (key == "_type") then
             return newType
-        else
-            return newType[key]
         end
+
+        return newType[key]
     end
 
     function proxy:__newindex(key, value)
