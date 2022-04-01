@@ -5,6 +5,7 @@
 Dictionary = class()
 Dictionary.array = nil
 Dictionary.length = nil
+Dictionary.serialiserTracker = nil
 
 --[[--
     Default constructor.
@@ -12,6 +13,7 @@ Dictionary.length = nil
 function Dictionary:__init()
     self.array = {}
     self.length = 0
+    self.serialiserTracker = Set()
 end
 
 --[[--
@@ -208,16 +210,23 @@ end
     Converts all it's members to simple Lua tables and returns a associative array of them.
     @return The generated associative array
 ]]
-function Dictionary:toTable()
+function Dictionary:toTable(serialiserUuid)
+    serialiserUuid = serialiserUuid or sm.uuid.new()
+
+    if not self.serialiserTracker:add(serialiserUuid) then
+        return
+    end
+
     local t = {}
 
     for k, v in self:getIterator() do
         if v.toTable ~= nil and type(v.toTable) == "function" then
-            t[k] = v:toTable()
+            t[k] = v:toTable(serialiserUuid)
         else
             t[k] = v
         end
     end
 
+    self.serialiserTracker:remove(serialiserUuid)
     return t
 end

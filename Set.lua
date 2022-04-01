@@ -2,6 +2,7 @@ Set = class()
 Set.keyProvider = nil
 Set.array = nil
 Set.length = nil
+Set.serialiserTracker = nil
 
 local function defaultKeyProvider(value)
     local uniqueKey
@@ -19,6 +20,7 @@ function Set:__init(keyProvider)
     self.keyProvider = keyProvider or defaultKeyProvider
     self.array = {}
     self.length = 0
+    self.serialiserTracker = Set()
 end
 
 function Set:add(value)
@@ -89,16 +91,23 @@ function Set:clone()
     return copy
 end
 
-function Set:toTable()
+function Set:toTable(serialiserUuid)
+    serialiserUuid = serialiserUuid or sm.uuid.new()
+
+    if not self.serialiserTracker:add(serialiserUuid) then
+        return
+    end
+
     local t = {}
 
     for _, value in self:getIterator() do
         if value.toTable ~= nil and type(value.toTable) == "function" then
-            table.insert(t, value:toTable())
+            table.insert(t, value:toTable(serialiserUuid))
         else
             table.insert(t, value)
         end
     end
 
+    self.serialiserTracker:remove(serialiserUuid)
     return t
 end

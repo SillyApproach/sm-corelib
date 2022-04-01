@@ -5,6 +5,7 @@
 List = class()
 List.array = nil
 List.length = nil
+List.serialiserTracker = nil
 
 --[[--
     Constructor
@@ -13,6 +14,7 @@ List.length = nil
 function List:__init(size)
     self.array = {}
     self.length = 0
+    self.serialiserTracker = Set()
 
     if size ~= nil and type(size) == "number" then
         for i = 1, size, 1 do
@@ -225,17 +227,24 @@ end
     Converts all it's members to simple Lua tables and returns an array of them.
     @return The generated array
 ]]
-function List:toTable()
+function List:toTable(serialiserUuid)
+    serialiserUuid = serialiserUuid or sm.uuid.new()
+
+    if not self.serialiserTracker:add(serialiserUuid) then
+        return
+    end
+
     local t = {}
 
     for _, v in self:getIterator() do
         if v.toTable ~= nil and type(v.toTable) == "function" then
-            table.insert(t, v:toTable())
+            table.insert(t, v:toTable(serialiserUuid))
         else
             table.insert(t, v)
         end
     end
 
+    self.serialiserTracker:remove(serialiserUuid)
     return t
 end
 
