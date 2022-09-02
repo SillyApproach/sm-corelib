@@ -51,11 +51,11 @@ function Set:remove(value)
     return isPresent
 end
 
-function Set:map(func)
+function Set:map(predicate)
     local result = Set()
 
     for _, value in self:getIterator() do
-        if func(value) then
+        if predicate(value) then
             result:add(value)
         end
     end
