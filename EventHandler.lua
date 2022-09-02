@@ -69,9 +69,9 @@ end
     @sender The object which raised the event
     @eventArgs Event specific arguments to be passed
 ]]
-function EventHandler:__call(sender, eventArgs)
+function EventHandler:__call(sender, ...)
     for k, v in self.handler:getIterator() do
-        if not v(sender, eventArgs) then
+        if not v(sender, ...) then
             break
         end
     end
