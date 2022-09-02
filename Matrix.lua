@@ -1,7 +1,4 @@
 Matrix = class()
-Matrix.m = nil
-Matrix.n = nil
-Matrix.data = nil
 
 local function newDataTable(m, n, v)
     local data = {}

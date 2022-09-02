@@ -3,9 +3,6 @@
     @type List
 ]]
 List = class()
-List.array = nil
-List.length = nil
-List.serialiserTracker = nil
 
 --[[--
     Constructor

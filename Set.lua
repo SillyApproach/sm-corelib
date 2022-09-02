@@ -1,8 +1,4 @@
 Set = class()
-Set.keyProvider = nil
-Set.array = nil
-Set.length = nil
-Set.serialiserTracker = nil
 
 local function defaultKeyProvider(value)
     local uniqueKey

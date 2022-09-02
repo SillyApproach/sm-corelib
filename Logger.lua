@@ -1,6 +1,4 @@
 Logger = class()
-Logger.logLevel = nil
-Logger.chatLogEnabled = nil
 
 function Logger:__init(logLevel, chatLogEnabled)
     self.logLevel = logLevel or LogLevelEnum.None

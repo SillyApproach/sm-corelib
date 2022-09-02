@@ -1,10 +1,4 @@
 Keypad = class()
-Keypad.layout = nil
-Keypad.gui = nil
-Keypad.scriptedShape = nil
-Keypad.buffer = nil
-Keypad.hasDecimalPoint = nil
-Keypad.negative = nil
 
 local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_keypadButtonCallback = function (shape, buttonName)

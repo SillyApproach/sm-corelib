@@ -1,6 +1,4 @@
 ScriptedShapeManager = class()
-ScriptedShapeManager.shapeMap = nil
-ScriptedShapeManager.interactableMap = nil
 
 function ScriptedShapeManager:__init()
     self.shapeMap = Dictionary()

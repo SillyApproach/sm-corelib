@@ -1,10 +1,4 @@
 HudListControl = class()
-HudListControl.scriptedShape = nil
-HudListControl.character = nil
-HudListControl.visibleElements = nil
-HudListControl.elements = nil
-HudListControl.position = nil
-HudListControl.gui = nil
 
 local function generateCallbacks(self, scriptedShape)
     scriptedShape.client_onAction = function (_, controllerAction, isPressed)

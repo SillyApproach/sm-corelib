@@ -1,9 +1,4 @@
 ListControl = class()
-ListControl.scriptedShape = nil
-ListControl.elements = nil
-ListControl.selected = nil
-ListControl.highlighted = nil
-ListControl.gui = nil
 
 local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_listControlScroll = function (shape, buttonName)

@@ -3,9 +3,6 @@
     @type Dictionary
 ]]
 Dictionary = class()
-Dictionary.array = nil
-Dictionary.length = nil
-Dictionary.serialiserTracker = nil
 
 --[[--
     Default constructor.

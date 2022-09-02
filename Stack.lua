@@ -1,6 +1,4 @@
 Stack = class()
-Stack.array = nil
-Stack.length = nil
 
 function Stack:__init()
     self.array = {}

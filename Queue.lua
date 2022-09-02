@@ -1,6 +1,4 @@
 Queue = class()
-Queue.array = nil
-Queue.length = nil
 
 function Queue:__init()
     self.array = {}

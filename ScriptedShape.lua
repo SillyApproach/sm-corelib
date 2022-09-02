@@ -7,11 +7,6 @@
     @field lastChangedTick Tracks the last tick of when the body, that the shape is part of, changed
 ]]
 ScriptedShape = class()
-ScriptedShape.events = nil
-ScriptedShape.lastParentCount = nil
-ScriptedShape.lastChildCount = nil
-ScriptedShape.lastColour = nil
-ScriptedShape.lastChangedTick = nil
 
 --[[--
     Registers basic events for this type.

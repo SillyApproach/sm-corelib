@@ -9,7 +9,6 @@
     @type EventHandler
 ]]
 EventHandler = class()
-EventHandler.handler = nil
 
 --[[--
     Default constructor

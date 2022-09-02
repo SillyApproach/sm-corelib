@@ -1,9 +1,4 @@
 Keyboard = class()
-Keyboard.layout = nil
-Keyboard.gui = nil
-Keyboard.scriptedShape = nil
-Keyboard.buffer = nil
-Keyboard.shift = nil
 
 local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_keyboardButtonCallback = function (shape, buttonName)
