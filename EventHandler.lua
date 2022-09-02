@@ -14,8 +14,9 @@ EventHandler.handler = nil
 --[[--
     Default constructor
 ]]
-function EventHandler:__init()
+function EventHandler:__init(initialCallback)
     self.handler = Dictionary()
+    _= self + initialCallback
 end
 
 --[[--
