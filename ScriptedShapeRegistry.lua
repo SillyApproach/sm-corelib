@@ -1,31 +1,31 @@
-ScriptedShapeManager = class()
+ScriptedShapeRegistry = class()
 
-function ScriptedShapeManager:__init()
+function ScriptedShapeRegistry:__init()
     self.shapeMap = Dictionary()
     self.interactableMap = Dictionary()
 end
 
-function ScriptedShapeManager:registerShape(scriptedShape)
+function ScriptedShapeRegistry:registerShape(scriptedShape)
     self.shapeMap:add(scriptedShape.shape:getId(), scriptedShape)
     self.interactableMap:add(scriptedShape.interactable:getId(), scriptedShape)
 end
 
-function ScriptedShapeManager:deregisterShape(scriptedShape)
+function ScriptedShapeRegistry:deregisterShape(scriptedShape)
     self.shapeMap:remove(scriptedShape.shape:getId())
     self.interactableMap:remove(scriptedShape.interactable:getId())
 end
 
-function ScriptedShapeManager:getShapeByShapeId(shapeId)
+function ScriptedShapeRegistry:getShapeByShapeId(shapeId)
     local _, value = self.shapeMap:tryGet(shapeId)
     return value
 end
 
-function ScriptedShapeManager:getShapeByInteractableId(interactableId)
+function ScriptedShapeRegistry:getShapeByInteractableId(interactableId)
     local _, value = self.interactableMap:tryGet(interactableId)
     return value
 end
 
-function ScriptedShapeManager:getShapesByUuid(uuid)
+function ScriptedShapeRegistry:getShapesByUuid(uuid)
     local shapes = List()
     uuid = type(uuid) == "string" and sm.uuid.new(uuid) or uuid
 
@@ -38,4 +38,4 @@ function ScriptedShapeManager:getShapesByUuid(uuid)
     return shapes
 end
 
-sm.game.scriptedShapes = ScriptedShapeManager()
+sm.game.scriptedShapes = ScriptedShapeRegistry()
