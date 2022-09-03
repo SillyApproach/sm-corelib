@@ -1,3 +1,5 @@
+--- Enum with all the log levels available for the logger
+--- @enum LogLevelEnum
 LogLevelEnum = {
     Trace = {
         level = 0,

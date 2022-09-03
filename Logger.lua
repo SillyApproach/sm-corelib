@@ -1,3 +1,7 @@
+--- Provides facilities to log messages with customisable log levels
+--- @class Logger
+--- @field private logLevel LogLevelEnum Log level to log at
+--- @field private chatLogEnabled boolean Whether to print logs to the chat
 Logger = class()
 
 function Logger:__init(logLevel, chatLogEnabled)
@@ -5,10 +9,16 @@ function Logger:__init(logLevel, chatLogEnabled)
     self.chatLogEnabled = chatLogEnabled or false
 end
 
+--- Whether the logger has been set to log at the given log level
+--- @param logLevel LogLevelEnum Log level to check against
+--- @return boolean @True if the logger logs at the given log level otherwise false
 function Logger:isEnabled(logLevel)
     return self.logLevel == logLevel
 end
 
+--- Logs a message at the given log level
+--- @param logLevel LogLevelEnum Log level to log at
+--- @param message string Message to log
 function Logger:log(logLevel, message)
     if logLevel.level < self.logLevel.level then
         return
@@ -29,10 +39,13 @@ function Logger:log(logLevel, message)
     end
 end
 
+--- Returns whether logs are printed in the chat
+--- @return boolean @True if enabled otherwise false
 function Logger:isChatLogEnabled()
     return self.chatLogEnabled
 end
 
+--- Toggles log printing in the chat
 function Logger:toggleChatLog()
     self.chatLogEnabled = not self.chatLogEnabled
 end

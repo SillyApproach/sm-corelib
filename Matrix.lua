@@ -1,5 +1,15 @@
+--- Represents a matrix and implements basic matrix operations
+--- @class Matrix
+--- @field private m number Number of rows
+--- @field private n number Number of columns
+--- @field private data table<number> Table containing the matrix' data
 Matrix = class()
 
+--- Creates table with fitting the required amount of elements
+--- @param m number Number of rows
+--- @param n number Number of columns
+--- @param v number Initial value of the matrix' elements
+--- @return table<number>
 local function newDataTable(m, n, v)
     local data = {}
     v = v or 0
@@ -15,6 +25,11 @@ local function newDataTable(m, n, v)
     return data
 end
 
+--- Lineary combines `a` and `b` by the given `sign`
+--- @param a number First matrix
+--- @param b number Second matrix
+--- @param sign number Sign determining addition or subtraction
+--- @return Matrix @Lineary combined matrix
 local function matrixEntrywiseSum(a, b, sign)
     assert((a.m == b.m) and (a.n == b.n), "Mismatching dimensions")
 
@@ -30,18 +45,30 @@ local function matrixEntrywiseSum(a, b, sign)
     return Matrix(data)
 end
 
+--- Initialises the matrix with the given data
+--- @param self Matrix Matrix instance
+--- @param data table<number> Initial matrix values
 local function __init1(self, data)
     self.m = #data
     self.n = #data[1]
     self.data = data
 end
 
+--- Initialises the matrix with the given initial value
+--- @param self Matrix Matrix instance
+--- @param m number Number of rows
+--- @param n number Number of columns
+--- @param v number Initial value of the matrix' elements
 local function __init2(self, m, n, v)
     self.m = m
     self.n = n
     self.data = newDataTable(m, n, v)
 end
 
+--- Constructor
+--- @vararg any Overloaded constructor parameters
+--- @overload fun(self: Matrix, initialData: table<number>)
+--- @overload fun(self: Matrix, m: number, n: number, initialValue: number)
 function Matrix:__init(...)
     local args = {...}
     assert(#args > 0, "No arguments passed. Either pass a table with matrix values or dimensions m and n and a default entry value v")
@@ -55,6 +82,10 @@ function Matrix:__init(...)
     end
 end
 
+--- Returns the product of a matrix multiplication
+--- @param a Matrix First matrix
+--- @param b Matrix Second matrix
+--- @return Matrix @Product of matrix multiplication
 function Matrix.__mul(a, b)
     assert(a.n == b.m, "Mismatching dimensions")
 
@@ -76,14 +107,23 @@ function Matrix.__mul(a, b)
     return Matrix(data)
 end
 
+--- Lineary combines two matrices by addition
+--- @param a Matrix First matrix
+--- @param b Matrix Second matrix
+--- @return Matrix @Lineary combined matrix
 function Matrix.__add(a, b)
     return matrixEntrywiseSum(a, b, 1)
 end
 
+--- Lineary combines two matrices by subtraction
+--- @param a Matrix First matrix
+--- @param b Matrix Second matrix
+--- @return Matrix @Lineary combined matrix
 function Matrix.__sub(a, b)
     return matrixEntrywiseSum(a, b, -1)
 end
 
+--- Transposes the matrix
 function Matrix:transpose()
     local data = newDataTable(self.n, self.m)
 

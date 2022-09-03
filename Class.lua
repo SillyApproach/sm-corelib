@@ -1,13 +1,10 @@
 sm._class = sm._class or class
 local function emptyCtor() end
 
---[[--
-    Extends the current class function with a callable constructor.
-    This can be used just as the previous version of class()
-    @usage local myType = class()
-    @usage function myType:__init() end
-    @usage myType(arg1, arg2, arg3)
-]]
+--- Extends the current class function with a callable constructor.
+--- <br>The function is backwards compatible with the default implemenation.
+--- @param superType? table Super class to inherit from
+--- @return table @Prototype table representing the new class
 function class(superType)
     local proxy, newType = sm._class()
 

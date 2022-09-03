@@ -1,5 +1,15 @@
+--- List Gui that can be scrolled through with buttons
+--- @class ListControl
+--- @field private scriptedShape ShapeClass Scripted shape instance the control gets attached to
+--- @field private elements table<string> Available list elements
+--- @field private selected number Index of the currently selected element
+--- @field private highlighted number Index of the currently highlighted element
+--- @field private gui GuiInterface Gui object that is rendered
 ListControl = class()
 
+--- Assigns the Gui callback functions for the gui to use
+--- @param self ListControl ListControl instance
+--- @param scriptedShape ShapeClass Scripted shape instance to attach callbacks to
 local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_listControlScroll = function (shape, buttonName)
         if buttonName == "ScrollUp" then
@@ -20,6 +30,8 @@ local function generateCallbacks(self, scriptedShape)
     end
 end
 
+--- Sets the appropriate callbacks for the given Gui buttons
+--- @param self ListControl ListControl instance
 local function setCallbacks(self)
     for i = -2, 2, 1 do
         self.gui:setButtonCallback(tostring(i), "gui_listControlScroll")
@@ -31,6 +43,11 @@ local function setCallbacks(self)
     self.gui:setOnCloseCallback("gui_listControlCloseCallback")
 end
 
+--- Constructor
+--- @param scriptedShape ShapeClass Scripted shape instance to attach the list to
+--- @param title string Displayed title of the list
+--- @param onConfirmCallback fun(number, any) Callback that is called when an element is selected
+--- @param onCloseCallback fun() Callback that is called when the list is closed
 function ListControl:__init(scriptedShape, title, elements, onConfirmCallback, onCloseCallback)
     assert(type(elements) == "table", "List must be a table")
     assert(onConfirmCallback ~= nil and type(onConfirmCallback) == "function", "Invalid confirm callback passed.")
@@ -59,6 +76,9 @@ function ListControl:__init(scriptedShape, title, elements, onConfirmCallback, o
     setCallbacks(self)
 end
 
+
+--- Changes the highlighted position relatively to its current by the given amount of steps
+--- @param steps number Amount of steps to scroll up or down. Positive numbers scroll down, negative scroll up.
 function ListControl:scroll(steps)
     if #self.elements == 0 then
         return
@@ -75,6 +95,8 @@ function ListControl:scroll(steps)
     self:update()
 end
 
+--- Jumps to and highlights the given position in the list
+--- @param i number
 function ListControl:jump(i)
     assert(i > 0 and i <= #self.elements, "Index out of range")
 
@@ -82,6 +104,7 @@ function ListControl:jump(i)
     self:update()
 end
 
+--- Updates the displayed Gui
 function ListControl:update()
     for i =-2, 2, 1 do
         local element = self.elements[self.highlighted + i]
@@ -93,6 +116,8 @@ function ListControl:update()
     self.gui:setVisible("ScrollDown", #self.elements > 1 and self.highlighted < #self.elements) -- Disable when reaching bottom
 end
 
+--- Returns a clone of the list's elements
+--- @return table @Elements
 function ListControl:getElements()
     local elements = {}
 
@@ -103,6 +128,9 @@ function ListControl:getElements()
     return elements
 end
 
+
+--- Sets and updates the displayable list elements
+--- @param elements table<string> Elements
 function ListControl:setElements(elements)
     assert(type(elements) == "table", "List must be a table")
 
@@ -112,19 +140,25 @@ function ListControl:setElements(elements)
     self:update()
 end
 
+--- Returns the index and element that has been selected
+--- @return number, string @Index and element
 function ListControl:getSelected()
     return self.selected, self.elements[self.selected]
 end
 
+--- Returns the index and element that is highlighted
+--- @return number, string @Index and element
 function ListControl:getHighlighted()
     return self.highlighted, self.elements[self.highlighted]
 end
 
+--- Opens the list Gui
 function ListControl:open()
     self:update()
     self.gui:open()
 end
 
+--- Called to destroy the hud list Gui
 function ListControl:destroy()
     self.gui:destroy()
 end

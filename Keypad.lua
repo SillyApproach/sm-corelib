@@ -1,5 +1,15 @@
+--- An on-screen keypad
+--- @class Keypad
+--- @field private gui GuiInterface Gui object that is rendered
+--- @field private scriptedShape ShapeClass Scripted shape instance the keypad gets attached to
+--- @field private buffer string Buffered keypad text during typing
+--- @field private hasDecimalPoint boolean Whether the number contains a decimal point
+--- @field private negative boolean Whether the number is negative
 Keypad = class()
 
+--- Assigns the Gui callback functions for the gui to use
+--- @param self Keypad Keypad instance
+--- @param scriptedShape ShapeClass Scripted shape instance to attach callbacks to
 local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_keypadButtonCallback = function (shape, buttonName)
         self:onButtonClick(buttonName)
@@ -34,6 +44,8 @@ local function generateCallbacks(self, scriptedShape)
     end
 end
 
+--- Sets the appropriate callbacks for the given Gui buttons
+--- @param self Keypad Keypad instance
 local function setCallbacks(self)
     for i = 0, 9, 1 do
         self.gui:setButtonCallback(tostring(i), "gui_keypadButtonCallback")
@@ -48,6 +60,11 @@ local function setCallbacks(self)
     self.gui:setOnCloseCallback("gui_keypadCloseCallback")
 end
 
+--- Constructor
+--- @param scriptedShape ShapeClass Scripted shape instance to attach the keypad to
+--- @param title string Displayed title of the keypad
+--- @param onConfirmCallback fun(number) Callback that is called when the keypad input is finalised
+--- @param onCloseCallback fun() Callback that is called when the keypad is closed
 function Keypad:__init(scriptedShape, title, onConfirmCallback, onCloseCallback)
     assert(onConfirmCallback ~= nil and type(onConfirmCallback) == "function", "Invalid confirm callback passed.")
     assert(onCloseCallback ~= nil and type(onCloseCallback) == "function", "Invalid close callback passed.")
@@ -75,6 +92,8 @@ function Keypad:__init(scriptedShape, title, onConfirmCallback, onCloseCallback)
     setCallbacks(self)
 end
 
+--- Opens the on-screen keyboard
+--- @param initialNumber string Initial number to show in the keypad's text field
 function Keypad:open(initialNumber)
     if initialNumber ~= nil and type(initialNumber) == "number" then
         self.buffer = tostring(initialNumber)
@@ -88,6 +107,8 @@ function Keypad:open(initialNumber)
     self.gui:open()
 end
 
+--- Called when a button is clicked
+--- @param buttonName string Name of the clicked button
 function Keypad:onButtonClick(buttonName)
     if self.buffer == "0" then
         self.buffer = buttonName
@@ -100,16 +121,19 @@ function Keypad:onButtonClick(buttonName)
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Called when the cancel button is clicked, cancelling the input and closing the keypad.
 function Keypad:cancel()
     self.gui:close()
 end
 
+--- Called when the clear button is clicked, resetting the number to 0
 function Keypad:clear()
     self.buffer = "0"
     self.hasDecimalPoint = false
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Called when the backspace button is clicked, erasing the latest buffered character
 function Keypad:backspace()
     local tempBuffer = self.buffer:sub(1, -2)
 
@@ -121,6 +145,7 @@ function Keypad:backspace()
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Called when the negation button is clicked, negating the current number
 function Keypad:negate()
     local number = tonumber(self.buffer) or 0
     number = number * -1
@@ -130,6 +155,7 @@ function Keypad:negate()
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Called when the decimal point button is clicked, adding a decimal point
 function Keypad:decimalPoint()
     if not self.hasDecimalPoint then
         self.hasDecimalPoint = true
@@ -139,6 +165,7 @@ function Keypad:decimalPoint()
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Destroys and closes the on-screen keyboard and its Gui
 function Keypad:destroy()
     self.gui:destroy()
 end

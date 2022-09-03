@@ -1,31 +1,24 @@
---[[--
-    Provides a simple way to define events.
-    Ability to subscribe to an event and add or remove event handler functions through simple means.
-    Event handlers are called in an arbitrary order. Return false if you want the propagation of the event to stop.
-    @usage local eventA = Eventhandler() -- Defines a new event
-    @usage local function eventHandler(sender, eventArgs) return true end -- Defines an event handler
-    @usage _= eventA + eventHandler -- Adds the event handler to the event (subscribing to the event)
-    @usage eventA(senderArg, { eventArg1, eventArg2 }) -- Raising the event
-    @type EventHandler
-]]
+--- Provides a simple way to define raisable events
+--- @class EventHandler
+--- @field private handler Dictionary Invokable event handler functions
 EventHandler = class()
 
---[[--
-    Default constructor
-]]
+--- @alias EventCallback fun(sender: any, ...?: any):boolean
+
+--- Constructor
+--- @param initialHandler EventCallback An initial handler function
 function EventHandler:__init(initialHandler)
     self.handler = Dictionary()
     _= self + initialHandler
 end
 
---[[--
-    Overloads the + operator for a simple subscription notation
-    @param a A function or the EventHandler object
-    @param b A function or the EventHandler object
-    @return Returns the EventHandler object
-    @raise Raises an error of no event handler function was passed
-]]
+--- Overloads the + operator for a simple subscription notation. One operand must be a function.
+--- @param a EventHandler | EventCallback Function or the EventHandler object
+--- @param b EventHandler | EventCallback Function or the EventHandler object
+--- @return EventHandler @Updated EventHandler
+--- @raise Error if no event handler function was passed
 function EventHandler.__add(a, b)
+    ---@type EventHandler
     local eventHandler
 
     if type(a) == "function" then
@@ -41,12 +34,11 @@ function EventHandler.__add(a, b)
     return eventHandler
 end
 
---[[--
-    Overloads the - operator for a simple unsubscription notation
-    @param a A function or the EventHandler object
-    @param b A function or the EventHandler object
-    @raise Raises an error of no event handler function was passed
-]]
+--- Overloads the - operator for a simple unsubscription notation. One operand must be a function.
+--- @param a EventHandler | EventCallback Function or the EventHandler object
+--- @param b EventHandler | EventCallback Function or the EventHandler object
+--- @return EventHandler @Udpated EventHandler
+--- @raise Error if no event handler function was passed
 function EventHandler.__sub(a, b)
     local eventHandler
 
@@ -63,28 +55,22 @@ function EventHandler.__sub(a, b)
     return eventHandler
 end
 
---[[--
-    Raises the event with the specified sender and event arguments
-    @sender The object which raised the event
-    @eventArgs Event specific arguments to be passed
-]]
+--- Raises the event with the specified sender and event arguments
+--- @param sender any Object raising the event
+--- @vararg any Event specific arguments to be passed
 function EventHandler:__call(sender, ...)
     for _, v in self.handler:getIterator() do
         v(sender, ...)
     end
 end
 
---[[--
-    Checks whether a given event has registered subscribers
-    @return Returns true if there is at least one subscirber otherwise false
-]]
+--- Checks whether the event has registered subscribers
+--- @return boolean @True if there is at least one subscirber otherwise false
 function EventHandler:hasSubscribers()
     return not self.handler:isEmpty()
 end
 
---[[--
-    Clears the list of all event handlers.
-]]
+--- Clears the list of all event handlers
 function EventHandler:clearAll()
     self.handler:clear()
 end

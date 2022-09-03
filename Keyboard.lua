@@ -1,5 +1,15 @@
+--- An on-screen keyboard
+--- @class Keyboard
+--- @field private layout table<number, string> Keyboard layout being rendered and used for input
+--- @field private gui GuiInterface Gui object that is rendered
+--- @field private scriptedShape ShapeClass Scripted shape instance the keyboard gets attached to
+--- @field private buffer string Buffered keyboard text during typing
+--- @field private shift boolean Whether the shift key is pressed and the alternative characters used
 Keyboard = class()
 
+--- Assigns the Gui callback functions for the gui to use
+--- @param self Keyboard Keyboard instance
+--- @param scriptedShape ShapeClass Scripted shape instance to attach callbacks to
 local function generateCallbacks(self, scriptedShape)
     scriptedShape.gui_keyboardButtonCallback = function (shape, buttonName)
         self:onButtonClick(buttonName)
@@ -30,6 +40,8 @@ local function generateCallbacks(self, scriptedShape)
     end
 end
 
+--- Sets the appropriate callbacks for the given Gui buttons
+--- @param self Keyboard Keyboard instance
 local function setCallbacks(self)
     for i = 1, #self.layout.keys, 1 do
         self.gui:setText(tostring(i), self.layout.keys[i][1])
@@ -44,6 +56,11 @@ local function setCallbacks(self)
     self.gui:setOnCloseCallback("gui_keyboardCloseCallback")
 end
 
+--- Constructor
+--- @param scriptedShape ShapeClass Scripted shape instance to attach the keyboard to
+--- @param title string Displayed title of the  keyboard
+--- @param onConfirmCallback fun(string) Callback that is called when the keyboard input is finalised
+--- @param onCloseCallback fun() Callback that is called when the keyboard is closed
 function Keyboard:__init(scriptedShape, title, onConfirmCallback, onCloseCallback)
     assert(onConfirmCallback ~= nil and type(onConfirmCallback) == "function", "Invalid confirm callback passed.")
     assert(onCloseCallback ~= nil and type(onCloseCallback) == "function", "Invalid close callback passed.")
@@ -69,12 +86,16 @@ function Keyboard:__init(scriptedShape, title, onConfirmCallback, onCloseCallbac
     setCallbacks(self)
 end
 
+--- Opens the on-screen keyboard
+--- @param initialText string Initial text to show in the keyboard's text field
 function Keyboard:open(initialText)
     self.buffer = initialText or ""
     self.gui:setText("Textbox", self.buffer)
     self.gui:open()
 end
 
+--- Called when a button is clicked
+--- @param buttonName string Name of the clicked button
 function Keyboard:onButtonClick(buttonName)
     local keyToAppend
 
@@ -89,15 +110,18 @@ function Keyboard:onButtonClick(buttonName)
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Called when the cancel button is clicked, cancelling the input and closing the keyboard.
 function Keyboard:cancel()
     self.gui:close()
 end
 
+--- Called when the backspace button is clicked, erasing the latest buffered character
 function Keyboard:backspace()
     self.buffer = self.buffer:sub(1, -2)
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Called when the shift button is clicked, thereby changing to the alternative shifted keyboard input
 function Keyboard:shiftKeys()
     self.shift = not self.shift
     self.gui:setButtonState("Shift", self.shift)
@@ -107,11 +131,13 @@ function Keyboard:shiftKeys()
     end
 end
 
+--- Called when then spacebar button is clicked appending a single space to the buffer
 function Keyboard:spacebar()
     self.buffer = self.buffer .. " "
     self.gui:setText("Textbox", self.buffer)
 end
 
+--- Destroys and closes the on-screen keyboard and its Gui
 function Keyboard:destroy()
     self.gui:destroy()
 end

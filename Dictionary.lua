@@ -1,24 +1,21 @@
---[[--
-    Provides functionalities to map keys to values
-    @type Dictionary
-]]
+--- Provides functionalities to map keys to values
+--- @class Dictionary
+--- @field private array table<any, any> Table containing the dictionary's elements
+--- @field private length number Number of elements within the dictionary
+--- @field private serialiserTracker Set A set tracking serialisation, preventing recursive calls
 Dictionary = class()
 
---[[--
-    Default constructor.
-]]
+--- Constructor
 function Dictionary:__init()
     self.array = {}
     self.length = 0
     self.serialiserTracker = Set()
 end
 
---[[--
-    Adds an object at with the specified key.
-    @param key The entry's key
-    @param value The object to be associated with the key
-    @raise Raises an error when a key is already in use
-]]
+--- Adds an object with the specified key
+--- @param key any The entry's key
+--- @param value any Object to be associated with the key
+--- @raise Error when a key is already in use
 function Dictionary:add(key, value)
     assert(not self:containsKey(key), "Key is already in use.")
 
@@ -26,12 +23,10 @@ function Dictionary:add(key, value)
     self.length = self.length + 1
 end
 
---[[--
-    Tries adding an object with the specified key.
-    @param key The entry's key
-    @param value The object to be associated with the key
-    @return Returns whether the key value pair was successfully added
-]]
+--- Tries adding an object with the specified key
+--- @param key any The entry's key
+--- @param value any Object to be associated with the key
+--- @return boolean @Whether the key value pair was successfully added
 function Dictionary:tryAdd(key, value)
     local kvPairAdded = false
 
@@ -44,44 +39,36 @@ function Dictionary:tryAdd(key, value)
     return kvPairAdded
 end
 
---[[--
-    Gets the object associated with the key.
-    @param key The key to look for
-    @return The object associated with the key
-    @raise Raises an error if there is no entry with the specified key
-]]
+--- Gets the object associated with the key
+--- @param key any Key to look for
+--- @return any @Object associated with the key
+--- @raise Error if there is no entry with the specified key
 function Dictionary:get(key)
     assert(self:containsKey(key), "Key not found.")
 
     return self.array[key]
 end
 
---[[--
-    Tries to get the object associated with the key.
-    @param key The associated key to look for
-    @return Returns a tuple. The first value signifies whether the key exists, the second contains the value or nil if the key was not found
-]]
+--- Tries to get the object associated with the key
+--- @param key any Key to look for
+--- @return boolean, any @Whether the key exists and the respective value on success
 function Dictionary:tryGet(key)
     return self:containsKey(key), self.array[key]
 end
 
---[[--
-    Sets the value where key points at
-    @param key The entry's key
-    @param value The value to set
-    @raise Raises an error if there is no entry with the specified key
-]]
+--- Sets the value associated with the key
+--- @param key any The entry's key
+--- @param value any Value to set
+--- @raise Error if there is no entry with the specified key
 function Dictionary:update(key, value)
     assert(self:containsKey(key), "Key not found.")
 
     self.array[key] = value
 end
 
---[[--
-    Removes the object associated with the key.
-    @param key The associated key to look for
-    @return Returns true if sucessfully removed otherwise false
-]]
+--- Removes the object associated with the key
+--- @param key any Key to look for
+--- @return boolean @True if sucessfully removed otherwise false
 function Dictionary:remove(key)
     local removed = false
 
@@ -94,36 +81,28 @@ function Dictionary:remove(key)
     return removed
 end
 
---[[--
-    Gets the iterator function for the dictionary.
-    @usage for k, v in myDictionary:getIterator() do end
-    @return The iterator function
-]]
+--- Returns the iterator function for the dictionary
+--- @usage for k, v in myDictionary:getIterator() do end
+--- @generic T, K, V
+--- @return (fun(table: table<K, V>, index?: K) : K, V), T @Iterator function
 function Dictionary:getIterator()
     return pairs(self.array)
 end
 
---[[--
-    Returns the length of the dictionary.
-    @return The length of the dictionary as number
-]]
+--- Returns the number of objects in the dictionary
+--- @return number @Current number of objects
 function Dictionary:getLength()
     return self.length
 end
 
---[[--
-    Checks whether the dictionary is empty.
-    @return True if the dictionary is empty otherwise false
-]]
+--- Checks whether the dictionary is empty
+--- @return boolean @True if the dictionary is empty otherwise false
 function Dictionary:isEmpty()
     return self:getLength() == 0
 end
 
---[[--
-    Clones the whole dictionary and returns a copy.
-    This is a shallow copy, the elements of the dictionary are not copied, only their references are.
-    @return A copy of the Dictionary object
-]]
+--- Returns a shallow copy
+--- @return Dictionary @Shallow copy
 function Dictionary:clone()
     local dict = Dictionary()
 
@@ -134,9 +113,7 @@ function Dictionary:clone()
     return dict
 end
 
---[[--
-    Clears the dictionary from all its members and sets the length to zero.
-]]
+--- Clears the dictionary
 function Dictionary:clear()
     if not self:isEmpty() then
         self.array = {}
@@ -144,22 +121,18 @@ function Dictionary:clear()
     end
 end
 
---[[--
-    Checks for the existence of the specified key.
-    @param key The key to check for
-    @return Returns true if there is an entry for the specified key otherwise false
-]]
+--- Checks for the existence of the specified key
+--- @param key any Key to check for
+--- @return boolean @True if the key has an entry otherwise false
 function Dictionary:containsKey(key)
     assert(key ~= nil, "Key can't be nil.")
 
     return self.array[key] ~= nil
 end
 
---[[--
-    Checks for the existence of the specified object.
-    @param value The object to check for
-    @return Returns true if there is an entry for the specified object otherwise false
-]]
+--- Checks for the existence of the specified object
+--- @param value any Object to check for
+--- @return boolean @True if there is an entry for the specified object otherwise false
 function Dictionary:containsValue(value)
     local contains = false
 
@@ -174,10 +147,8 @@ function Dictionary:containsValue(value)
     return contains
 end
 
---[[--
-    Generates a List with a copy of all the keys in the dictionary.
-    @return The List of all current keys
-]]
+--- Generates a List with a copy of all the keys in the dictionary
+--- @return List @List of all current keys
 function Dictionary:getKeys()
     local keys = List()
 
@@ -188,11 +159,8 @@ function Dictionary:getKeys()
     return keys
 end
 
-
---[[--
-    Generates a List with a copy of all the objects in the dictionary.
-    @return The List of all current objects
-]]
+--- Generates a List with a copy of all the objects in the dictionary
+--- @return List @List of all current objects
 function Dictionary:getValues()
     local values = List()
 
@@ -203,10 +171,9 @@ function Dictionary:getValues()
     return values
 end
 
---[[--
-    Converts all it's members to simple Lua tables and returns a associative array of them.
-    @return The generated associative array
-]]
+--- Converts all it's members to simple Lua tables and returns it
+--- @generic K, V
+--- @return table<K, V> @Generated associative array
 function Dictionary:toTable(serialiserUuid)
     serialiserUuid = serialiserUuid or sm.uuid.new()
 

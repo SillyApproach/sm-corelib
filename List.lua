@@ -1,46 +1,39 @@
---[[--
-    Provides functionalities to manage lists of objects.
-    @type List
-]]
+--- Provides functionalities to manage lists of objects
+--- @class List
+--- @field private array table<number, any> Table containing the list's elements
+--- @field private length number Number of elements within the list
+--- @field private serialiserTracker Set A set tracking serialisation, preventing recursive calls
 List = class()
 
---[[--
-    Constructor
-    @param size The initial size of the list
-]]
+--- Constructor
+--- @param size? number Initial size of the list
 function List:__init(size)
     self.array = {}
     self.length = 0
     self.serialiserTracker = Set()
     size = type(size) == "number" and size or 0
 
-        for i = 1, size, 1 do
-            self:add(0)
-        end
+    for i = 1, size, 1 do
+        self:add(0)
     end
+end
 
---[[--
-    Checks whether the list contains the specified object.
-    @param object The object to check for
-    @return True if the list contains the specified object otherwise false
-]]
+--- Checks whether the list contains the specified object
+--- @param object any Object to check for
+--- @return boolean @True if the list contains the specified object otherwise false
 function List:contains(object)
     return self:indexOf(object) > 0
 end
 
---[[--
-    Adds the passed object to the list.
-    @param object The object to add
-]]
+--- Adds the passed object to the list
+--- @param object any The object to add
 function List:add(object)
     self:insert(nil, object)
 end
 
---[[--
-    Inserts the passed object at the specified position in the list.
-    @param i The position in the list to insert the object
-    @param object The object to insert
-]]
+--- Inserts the passed object at the specified position in the list
+--- @param i number Position in the list to insert the object
+--- @param object any Object to insert
 function List:insert(i, object)
     if not i then
         table.insert(self.array, object)
@@ -51,11 +44,9 @@ function List:insert(i, object)
     end
 end
 
---[[--
-    Updates the value at the given index.
-    @param i The position in the list to update
-    @param object The new value for the given index
-]]
+--- Updates the value at the given index
+--- @param i number Position in the list to update
+--- @param object any New value for the given index
 function List:update(i, object)
     assert(i > 0 and i <= self:getLength(), "Index out of bounds.")
     assert(object ~= nil, "Value can't be nil.")
@@ -63,11 +54,9 @@ function List:update(i, object)
     self.array[i] = object
 end
 
---[[--
-    Adds a range of objects to the end of the list.
-    The range can be either a List object or a simple Lua table
-    @param range The range to add
-]]
+--- Adds a range of objects to the end of the list.
+--- <br>The range can be either a List object or a simple Lua table.
+--- @param range List | table<number, any> Range to add
 function List:addRange(range)
     if range.getIterator and type(range.getIterator) == "function" then
         for _, v in range:getIterator() do
@@ -80,10 +69,8 @@ function List:addRange(range)
     end
 end
 
---[[--
-    Removes the passed object from the list.
-    @param object The object to remove from the list
-]]
+--- Removes the passed object from the list
+--- @param object any Object to remove from the list
 function List:remove(object)
     local i = self:indexOf(object)
 
@@ -92,11 +79,9 @@ function List:remove(object)
     end
 end
 
---[[--
-    Removes an object at the specified position.
-    @param i The position of the object to be removed
-    @raise Raises an error if the index is out of bounds
-]]
+--- Removes an object at the specified position.
+--- @param i number Position of the object to be removed
+--- @raise Error if the index is out of bounds
 function List:removeAt(i)
     assert(i > 0 and i <= self:getLength(), "Index out of bounds.")
 
@@ -104,12 +89,10 @@ function List:removeAt(i)
     self.length = self.length - 1
 end
 
---[[--
-    Removes all objects satisfying the passed matching expression.
-    @param match A function which constitutes the matching expression
-    @return The number of matched items that have been removed
-    @raise Raises an error if no matching expression has been passed
-]]
+--- Removes all objects satisfying the passed matching expression.
+--- @param match fun(number, any) : boolean Function which constitutes the matching expression
+--- @return number @Number of matched items that have been removed
+--- @raise Error if no matching expression has been passed
 function List:removeAll(match)
     assert(match ~= nil, "Match can't be nil.")
     assert(type(match) == "function", "Argument of type function expected.")
@@ -126,9 +109,7 @@ function List:removeAll(match)
     return removedItems
 end
 
---[[--
-    Clears the list from all its members and sets the length to zero.
-]]
+--- Clears the list from all its members and sets the length to zero
 function List:clear()
     if not self:isEmpty() then
         self.array = {}
@@ -136,47 +117,37 @@ function List:clear()
     end
 end
 
---[[--
-    Returns the length of the list.
-    @return The length of the list as number
-]]
+--- Returns the length of the list.
+--- @return number @Length of the list as number
 function List:getLength()
     return self.length
 end
 
---[[--
-    Returns the first element of the list.
-    @return The object at first position
-]]
+--- Returns the first element of the list.
+--- @return any @The object at first position
 function List:getFirst()
     return self:getAt(1)
 end
 
---[[--
-    Returns the last element of the list.
-    @return The object at the last position
-]]
+--- Returns the last element of the list.
+--- @return any @Object at the last position
 function List:getLast()
     return self:getAt(self:getLength())
 end
 
---[[--
-    Returns the object at the specified position.
-    @param i The position of the object
-    @return The object at the specified position
-    @raise Raises an error if the index is out of bounds
-]]
+--- Returns the object at the specified position.
+--- @param i number Position of the object
+--- @return any @Object at the specified position
+--- @raise Error if the index is out of bounds
 function List:getAt(i)
     assert(i > 0 and i <= self:getLength(), "Index out of range.")
 
     return self.array[i]
 end
 
---[[--
-    Looks for the passed object and returns its index if found.
-    @param object The object to look for
-    @return The objects position in the list or -1 if there was no match
-]]
+--- Looks for the passed object and returns its index if found.
+--- @param object any Object to look for
+--- @return number @Object's position in the list or -1 if there was no match
 function List:indexOf(object)
     local index = -1
 
@@ -190,13 +161,11 @@ function List:indexOf(object)
     return index
 end
 
---[[--
-    Creates a range of elements as List for the passed index and count.
-    @param index The start position of the range
-    @param count The number of elements for the range
-    @return The List object containing the range
-    @raise Raises an error of either the index or the count of elements are out of range
-]]
+--- Creates a range of elements as List for the passed index and count.
+--- @param index number Start position of the range
+--- @param count number Number of elements for the range
+--- @return List @Elements of specified range
+--- @raise Error of either the index or the count of elements are out of range
 function List:getRange(index, count)
     assert(index > 0 and index <= self:getLength(), "Index out of range.")
     assert(count >= 0 and index + count <= self:getLength(), "Index out of range.")
@@ -210,19 +179,15 @@ function List:getRange(index, count)
     return list
 end
 
---[[--
-    Gets the iterator function for the list.
-    @usage for i, v in myDictionary:getIterator() do end
-    @return The iterator function
-]]
+--- Gets the iterator function for the list.
+--- @generic T, V
+--- @return (fun(table: V[], i: integer) : integer, V), T, integer @Iterator function
 function List:getIterator()
     return ipairs(self.array)
 end
 
---[[--
-    Converts all it's members to simple Lua tables and returns an array of them.
-    @return The generated array
-]]
+--- Converts all it's members to simple Lua tables and returns an array of them.
+--- @return table<number, any> @Generated simple table
 function List:toTable(serialiserUuid)
     serialiserUuid = serialiserUuid or sm.uuid.new()
 
@@ -244,9 +209,7 @@ function List:toTable(serialiserUuid)
     return t
 end
 
---[[--
-    Reverses the order of the list.
-]]
+--- Reverses the list's order
 function List:reverse()
     local stack = Stack()
 
@@ -259,32 +222,25 @@ function List:reverse()
     end
 end
 
---[[--
-    Clones the whole list and returns a copy.
-    This is a shallow copy, the elements of the list are not copied, only their references are.
-    @return A copy of the List object
-]]
+--- Clones the whole list and returns a shallow copy
+--- @return List @Copy of the list
 function List:clone()
     return self:getRange(1, self:getLength())
 end
 
---[[--
-    Checks whether the list is empty.
-    @return True if the list is empty otherwise false
-]]
+--- Checks whether the list is empty
+--- @return boolean @True if the list is empty otherwise false
 function List:isEmpty()
     return self:getLength() == 0
 end
 
---[[--
-    Creates a List of the objects satisfying the passed match expression.
-    @local
-    @param self The List object to look into
-    @param match The matching expression function
-    @param returnOnFirstOccurrence Whether to stop the search at the first occurrence
-    @return A List object with the matching objects
-    @raise Raises an error when no match expression has been passed
-]]
+--- Creates a List of the objects satisfying the passed match expression
+--- @local
+--- @param self List List instance to look into
+--- @param match fun(i: number, value: any) Match expression function
+--- @param returnOnFirstOccurrence boolean Whether to stop the search at the first occurrence
+--- @return List @Matching objects
+--- @raise Error when no match expression has been passed
 local function find(self, match, returnOnFirstOccurrence)
     assert(match ~= nil, "Match can't be nil.")
     assert(type(match) == "function", "Argument of type function expected.")
@@ -304,42 +260,34 @@ local function find(self, match, returnOnFirstOccurrence)
     return result
 end
 
---[[--
-    Search for the first occurrence of an object satisfying the match expression.
-    @param match The match expression function
-    @return The first element satisfying the match expression
-]]
+--- Search for the first occurrence of an object satisfying the match expression
+--- @param match fun(i: number, value: any) Match expression function
+--- @return any @First element satisfying the match expression
 function List:find(match)
     return find(self, match, true):getFirst()
 end
 
---[[--
-    Search for the last occurrence of an object satisfying the match expression.
-    @param match The match expression function
-    @return The last element satisfying the match expression
-]]
+--- Search for the last occurrence of an object satisfying the match expression
+--- @param match fun(i: number, value: any) Match expression function
+--- @return any @Last element satisfying the match expression
 function List:findLast(match)
     return find(self, match, false):getLast()
 end
 
---[[--
-    Search for all objects satisfying the match expression.
-    @param match The match expression function
-    @return The list of all matching objects
-]]
+--- Search for all objects satisfying the match expression
+--- @param match fun(i: number, value: any) Match expression function
+--- @return List @Matching objects
 function List:findAll(match)
     return find(self, match, false)
 end
 
---[[--
-    Search for an object satisfying the match expression and return its index
-    @param startIndex The position to start the search from
-    @param elements The range's amount of elements
-    @param match The match expression function
-    @param returnOnFirstOccurrence Whether to stop the search at the first occurrence
-    @return The index of the matched object or -1 if not found
-    @raise Raises an error when no match expression has been passed
-]]
+--- Search for an object satisfying the match expression and return its index
+--- @param startIndex number Position to start the search from
+--- @param elements number Range's amount of elements
+--- @param match fun(i: number, value: any) Match expression function
+--- @param returnOnFirstOccurrence boolean Whether to stop the search at the first occurrence
+--- @return number @Index of the matched object or -1 if not found
+--- @raise Error when no match expression has been passed
 local function findIndexInRange(self, startIndex, elements, match, returnOnFirstOccurrence)
     assert(startIndex > 0 and startIndex <= self:getLength()
             and startIndex + elements <= self:getLength(),
@@ -362,54 +310,44 @@ local function findIndexInRange(self, startIndex, elements, match, returnOnFirst
     return index
 end
 
---[[--
-    Searches and returns the index of the first occurence of an object satisfying the match expression.
-    @param match The match expression function
-    @return The index of the matched object or -1 if not found
-    @raise @see findIndexInRange
-]]
+--- Searches and returns the index of the first occurence of an object satisfying the match expression
+--- @param match fun(i: number, value: any) Match expression function
+--- @return number @Index of the matched object or -1 if not found
+--- @raise Error when no match expression has been passed
 function List:findIndex(match)
     return findIndexInRange(self, 1, self:getLength(), match, true)
 end
 
---[[--
-    Searches and returns the index of the last occurence of an object satisfying the match expression.
-    @param match The match expression function
-    @return The index of the matched object or -1 if not found
-    @raise @see findIndexInRange
-]]
+--- Searches and returns the index of the last occurence of an object satisfying the match expression
+--- @param match fun(i: number, value: any) Match expression function
+--- @return number @Index of the matched object or -1 if not found
+--- @raise Error when no match expression has been passed
 function List:findLastIndex(match)
     return findIndexInRange(self, 1, self:getLength(), match, false)
 end
 
---[[--
-    Searches from the specified position and returns the index of the first occurence of an object satisfying the match expression.
-    @param index The position to start from
-    @param match The match expression function
-    @return The index of the matched object or -1 if not found
-    @raise Raises an error when the index is out of bounds
-]]
+--- Searches from the specified position and returns the index of the first occurence of an object satisfying the match expression
+--- @param index number Position to start from
+--- @param match fun(i: number, value: any) Match expression function
+--- @return number @Index of the matched object or -1 if not found
+--- @raise Error when the index is out of bounds
 function List:findIndexAfter(index, match)
     return findIndexInRange(self, index, self:getLength() - index + 1, match, true)
 end
 
---[[--
-    Searches and returns the index of the first occurence of an object satisfying the match expression in the specified range.
-    @param index The position to start from
-    @param elements The range's amount of elements
-    @param match The match expression function
-    @return The index of the matched object or -1 if not found
-    @raise Raises an error when the range is out of bounds
-]]
+--- Searches and returns the index of the first occurence of an object satisfying the match expression in the specified range
+--- @param index number Position to start from
+--- @param elements number Range's amount of elements
+--- @param match fun(i: number, value: any) Match expression function
+--- @return number @Index of the matched object or -1 if not found
+--- @raise Error when the range is out of bounds
 function List:findIndexInRange(index, elements, match)
     return findIndexInRange(self, index, elements, match, true)
 end
 
---[[--
-    Checks whether the list contains an object satisfying the match expression.
-    @param match THe match expression function
-    @return True on the first occurrence otherwise false
-]]
+--- Checks whether the list contains an object satisfying the match expression
+--- @param match fun(i: number, value: any) Match expression function
+--- @return boolean @True on the first occurrence otherwise false
 function List:exists(match)
     return self:find(match) ~= nil
 end

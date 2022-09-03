@@ -1,18 +1,15 @@
---[[--
-    @type Provides basic methods and events for scripted parts.
-    @field events Contains the basic events
-    @field lastParentCount Tracks the number of connected parents
-    @filed lastChildCount Track the number of connected children
-    @field lastColour Tracks the shapes colour
-    @field lastChangedTick Tracks the last tick of when the body, that the shape is part of, changed
-]]
+--- Provides basic methods and events for scripted parts
+--- @class ScriptedShape
+--- @field private events Dictionary Contains the basic events
+--- @field private lastParentCount number Number of connected parents
+--- @field private lastChildCount number Number of connected children
+--- @field private lastColour Color Shape's colour
+--- @field private lastChangedTick number Last tick of when the body - of which the shape is a part - changed
 ScriptedShape = class()
 
---[[--
-    Registers basic events for this type.
-    @param self The scripted shape instance
-    @local
-]]
+--- Registers basic events for this type
+--- @param self ScriptedShape Scripted shape instance
+--- @local
 local function registerEvents(self)
     self.events:add("parentConnectedEvent", EventHandler())
     self.events:add("parentDisconnectedEvent", EventHandler())
@@ -22,11 +19,9 @@ local function registerEvents(self)
     self.events:add("bodyChangedEvent", EventHandler())
 end
 
---[[--
-    Checks for parent connection changes and raises the respective event.
-    @param self The scripted shape instance
-    @local
-]]
+--- Checks for parent connection changes and raises the respective event
+--- @param self ScriptedShape Scripted shape instance
+--- @local
 local function checkForParentConnectionChanges(self)
     local parentConnectedEvent = self.events:get("parentConnectedEvent")
     local parentDisconnectedEvent = self.events:get("parentDisconnectedEvent")
@@ -50,11 +45,9 @@ local function checkForParentConnectionChanges(self)
     end
 end
 
---[[--
-    Checks for child connection changes and raises the respective event.
-    @param self The scripted shape instance
-    @local
-]]
+--- Checks for child connection changes and raises the respective event
+--- @param self ScriptedShape Scripted shape instance
+--- @local
 local function checkForChildConnectionChanges(self)
     local childConnectedEvent = self.events:get("childConnectedEvent")
     local childDisconnectedEvent = self.events:get("childDisconnectedEvent")
@@ -78,11 +71,9 @@ local function checkForChildConnectionChanges(self)
     end
 end
 
---[[--
-    Checks for colour changes and raises the respective event.
-    @param self The scripted shape instance
-    @local
-]]
+--- Checks for colour changes and raises the respective event
+--- @param self ScriptedShape Scripted shape instance
+--- @local
 local function checkForColourChanges(self)
     local colourChangedEvent = self.events:get("colourChangedEvent")
 
@@ -98,11 +89,9 @@ local function checkForColourChanges(self)
     end
 end
 
---[[--
-    Checks for changes of the body, that the shape is part of and raises the respective event.
-    @param self The scripted shape instance
-    @local
-]]
+--- Checks for changes of the body, that the shape is part of and raises the respective event
+--- @param self ScriptedShape Scripted shape instance
+--- @local
 local function checkForBodyChanges(self)
     local bodyChangedEvent = self.events:get("bodyChangedEvent")
 
@@ -117,9 +106,7 @@ local function checkForBodyChanges(self)
     end
 end
 
---[[--
-    Default constructor.
-]]
+--- Constructor
 function ScriptedShape:__init()
     self.lastParentCount = 0
     self.lastChildCount = 0
@@ -129,9 +116,7 @@ function ScriptedShape:__init()
     registerEvents(self)
 end
 
---[[--
-    The event handler which is called upon creation of a scripted part
-]]
+--- Event handler which is called upon creation of a scripted part
 function ScriptedShape:server_onCreate()
     self.lastParentCount = #self.interactable:getParents()
     self.lastChildCount = #self.interactable:getChildren()
@@ -140,17 +125,13 @@ function ScriptedShape:server_onCreate()
     sm.game.scriptedShapes:registerShape(self)
 end
 
---[[--
-    The event handler which is called upon destruction of a scripted part
-]]
+--- Event handler which is called upon destruction of a scripted part
 function ScriptedShape:server_onDestroy()
     sm.game.scriptedShapes:deregisterShape(self)
 end
 
---[[--
-    The parts server loop method.
-    @param deltaTime Elapsed time since the last call
-]]
+--- The part's server loop method
+--- @param deltaTime number Elapsed time since the last call
 function ScriptedShape:server_onFixedUpdate(deltaTime)
     checkForParentConnectionChanges(self)
     checkForChildConnectionChanges(self)
@@ -158,10 +139,8 @@ function ScriptedShape:server_onFixedUpdate(deltaTime)
     checkForBodyChanges(self)
 end
 
---[[--
-    Returns whether the scripted shape has any data saved onto the world storage
-    @return Returns a boolean signifying whether something has been stored
-]]
+--- Returns whether the scripted shape has any data saved onto the world storage
+--- @return boolean @True if something has been saved onto the storage otherwise false
 function ScriptedShape:server_hasStoredData()
     local data = self.storage:load()
     local hasData = false
@@ -178,10 +157,8 @@ function ScriptedShape:server_hasStoredData()
     return hasData
 end
 
---[[--
-    Returns a dictionary of the registered events and their event handlers
-    @return The registered events
-]]
+--- Returns a dictionary of the registered events and their event handlers
+--- @return Dictionary @Registered events
 function ScriptedShape:getEvents()
     return self.events:clone()
 end
