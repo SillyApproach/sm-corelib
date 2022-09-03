@@ -75,11 +75,11 @@ function Keypad:__init(scriptedShape, title, onConfirmCallback, onCloseCallback)
     setCallbacks(self)
 end
 
-function Keypad:open(initialBuffer)
-    if initialBuffer ~= nil and type(initialBuffer) == "number" then
-        self.buffer = tostring(initialBuffer)
-        self.hasDecimalPoint = initialBuffer % 1 ~= 0
-        self.negative = initialBuffer < 0
+function Keypad:open(initialNumber)
+    if initialNumber ~= nil and type(initialNumber) == "number" then
+        self.buffer = tostring(initialNumber)
+        self.hasDecimalPoint = initialNumber % 1 ~= 0
+        self.negative = initialNumber < 0
     else
         self.buffer = "0"
     end

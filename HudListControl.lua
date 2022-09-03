@@ -39,8 +39,8 @@ function HudListControl:setElements(elements)
     self:update()
 end
 
-function HudListControl:scroll(direction)
-    self.position = self.position + direction
+function HudListControl:scroll(steps)
+    self.position = self.position + steps
 
     if self.position < 1 or #self.elements < self.visibleElements then
         self.position = 1

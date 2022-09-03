@@ -13,9 +13,9 @@ EventHandler = class()
 --[[--
     Default constructor
 ]]
-function EventHandler:__init(initialCallback)
+function EventHandler:__init(initialHandler)
     self.handler = Dictionary()
-    _= self + initialCallback
+    _= self + initialHandler
 end
 
 --[[--

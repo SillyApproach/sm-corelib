@@ -69,8 +69,8 @@ function Keyboard:__init(scriptedShape, title, onConfirmCallback, onCloseCallbac
     setCallbacks(self)
 end
 
-function Keyboard:open(initialBuffer)
-    self.buffer = initialBuffer or ""
+function Keyboard:open(initialText)
+    self.buffer = initialText or ""
     self.gui:setText("Textbox", self.buffer)
     self.gui:open()
 end

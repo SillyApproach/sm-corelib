@@ -59,12 +59,12 @@ function ListControl:__init(scriptedShape, title, elements, onConfirmCallback, o
     setCallbacks(self)
 end
 
-function ListControl:scroll(relativeIndex)
+function ListControl:scroll(steps)
     if #self.elements == 0 then
         return
     end
 
-    self.highlighted = self.highlighted + relativeIndex
+    self.highlighted = self.highlighted + steps
 
     if self.highlighted < 1 then
         self.highlighted = 1
