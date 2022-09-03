@@ -12,13 +12,12 @@ function List:__init(size)
     self.array = {}
     self.length = 0
     self.serialiserTracker = Set()
+    size = type(size) == "number" and size or 0
 
-    if size ~= nil and type(size) == "number" then
         for i = 1, size, 1 do
             self:add(0)
         end
     end
-end
 
 --[[--
     Checks whether the list contains the specified object.
