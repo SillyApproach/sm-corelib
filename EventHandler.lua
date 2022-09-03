@@ -69,10 +69,8 @@ end
     @eventArgs Event specific arguments to be passed
 ]]
 function EventHandler:__call(sender, ...)
-    for k, v in self.handler:getIterator() do
-        if not v(sender, ...) then
-            break
-        end
+    for _, v in self.handler:getIterator() do
+        v(sender, ...)
     end
 end
 
