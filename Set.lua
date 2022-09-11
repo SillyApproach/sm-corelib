@@ -15,15 +15,7 @@ Set = class()
 --- @param value any Value to generate key for
 --- @return any @Generated key
 local function defaultKeyProvider(value)
-    local uniqueKey
-
-    if type(value) == "table" then
-        uniqueKey = tostring(value)
-    else
-        uniqueKey = value
-    end
-
-    return uniqueKey
+    return value
 end
 
 --- Constructor
